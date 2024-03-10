@@ -5,11 +5,14 @@ axios
   .then(({ data }) => {
     const $ = cheerio.load(data);
 
-    const playerNames = $("p.col-lg-6.ellipses a.semi-bold")
-      .map((_, product) => {
-        const $product = $(product);
-        return $product.text();
+    const players = $("p.col-lg-6.ellipses")
+      .map((_, player) => {
+        const $player = $(player);
+        const name = $player.find(".semi-bold").text();
+        const position = $player.find(".col-lg-2.ac.fs09e").text();
+        return { name: name, position: position };
       })
       .toArray();
-    console.log(playerNames);
+    players.pop();
+    console.log(players);
   });
