@@ -10,15 +10,16 @@ async function scrapePlayersData() {
     );
     const $ = cheerio.load(data);
 
-    const teams = $("a.entity-list-row-container.image-logo")
-      .map((_, teams) => {
-        const $teams = $(teams);
-        const name = $teams.find("div.entity-list-row-content").text();
-        return { name: name };
+    const teamsName = $(
+      "a.entity-list-row-container.image-logo div.entity-list-row-content"
+    )
+      .map((_, teamsName) => {
+        const $teamsName = $(teamsName);
+        return $teamsName.text();
       })
       .toArray();
 
-    return teams; // Return the players array
+    return teamsName;  
   } catch (error) {
     console.error("Error scraping players' data:", error);
     return []; // Return an empty array in case of error
