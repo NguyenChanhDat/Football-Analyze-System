@@ -1,0 +1,16 @@
+class match{
+    constructor(homeTeam, awayTeam, homeGoals, awayGoals);
+    homeTeam;
+    awayTeam;
+    homeGoals;
+    awayGoals;
+    season;
+}
+
+class team{
+    name;
+    metrics={object of metrics};
+    matches=[array of matches];
+    addMatch(homeTeam, awayTeam, )
+}
+
