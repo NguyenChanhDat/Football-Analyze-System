@@ -8,11 +8,16 @@ class Team {
     this.metrics[metric] = value;
   }
 }
-
+class result {
+  constructor(homeTeamGoal, awayTeamGoal) {
+    this.homeTeamGoal = homeTeamGoal;
+    this.awayTeamGoal = awayTeamGoal;
+  }
+}
 class Match {
-  constructor(homeTeam, awayTeam, result) {
-    this.homeTeam = homeTeam;
-    this.awayTeam = awayTeam;
+  constructor(firstTeam, secondTeam, result) {
+    this.firstTeam = firstTeam;
+    this.secondTeam = secondTeam;
     this.result = result; // Object containing match result (e.g., goals scored, goals conceded)
   }
 }
@@ -25,20 +30,30 @@ class TeamGraph {
 
   addTeam(teamName) {
     if (!this.teams[teamName]) {
-      this.teams[teamName] = new Team(teamName);
+      this.teams[teamName] = new Team(String(teamName));
     }
   }
-
-  addMatch(homeTeam, awayTeam, result) {
-    this.addTeam(homeTeam);
-    this.addTeam(awayTeam);
-
-    this.matches.push(new Match(homeTeam, awayTeam, result));
+  addMatch(firstTeam, secondTeam, fisrtTeamGoal, secondTeamGoal) {
+    this.matches.push(
+      new Match(
+        firstTeam,
+        secondTeam,
+        new result(fisrtTeamGoal, secondTeamGoal)
+      )
+    );
   }
 }
-let nouveauGraph = new TeamGraph();
-nouveauGraph.addTeam("Tottenham Hotspur");
-nouveauGraph.addTeam("Manchester United");
-nouveauGraph.addTeam("Chelsea");
-console.log(nouveauGraph);
+// let nouveauGraph = new TeamGraph();
+// nouveauGraph.addTeam("Tottenham Hotspur");
+// nouveauGraph.addTeam("Manchester United");
+// nouveauGraph.addTeam("Chelsea");
+// nouveauGraph.addTeam("Manchester City");
+// nouveauGraph.addMatch("Chelsea", "Manchester United", 4, 3);
+// nouveauGraph.addMatch("Manchester United", "Manchester City", 1, 3);
+
+// console.log(nouveauGraph);
+// for (let i = 0; i < nouveauGraph.matches.length; i++) {
+//   console.log(nouveauGraph.matches[i].result);
+// }
+
 module.exports = TeamGraph;
