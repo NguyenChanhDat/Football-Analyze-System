@@ -42,11 +42,6 @@ body{
     overflow: auto;
     margin-top: 10vh;
 }
-#teamsMetrics{
-    display: flex;
+.table{
     font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
-}
-
-#teamsMetrics #1{
-    justify-content: left;
 }

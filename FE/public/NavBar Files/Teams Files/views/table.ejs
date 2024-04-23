@@ -21,7 +21,7 @@
     <!-- place navbar here -->
     <nav id="navBar" class="navbar navbar-expand-sm navbar-light">
       <div class="container" id="containerLion">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="http://localhost:8083">
           <div class="container" id="lionDiv">
             <img id="Lion" src="../../Images/logoPremierLeague.png" />
             Premier League
@@ -43,7 +43,7 @@
             <li class="nav-item">
               <a
                 class="nav-link active"
-                href="../NavBar Files/teams.html"
+                href="../../NavBar Files/teams.html"
                 aria-current="page"
                 >Teams</a
               >
@@ -51,7 +51,7 @@
             <li class="nav-item">
               <a
                 class="nav-link active"
-                href="../NavBar Files/matches.html"
+                href="../../NavBar Files/matches.html"
                 aria-current="page"
                 >Matches</a
               >
@@ -70,33 +70,38 @@
     <main>
       <div id="mainBox" class="container">
         <div>
-          <ul class="list-group custom-list-group" id="listGroup">
-            <div id="boardHeader" class="container-fluid">
-              <p>Team</p>
-              <p>MP</p>
-              <p>W</p>
-              <p>D</p>
-              <p>L</p>
-              <p>G</p>
-              <p>GC</p>
-              <p>Pts</p>
-              <p>GD</p>
-            </div>
-            <% for (let i = 0; i < teams.length; i++) { %>
-            <div class="container-fluid" id="teamsMetrics">
-              <div id="1"><%= i+1 %></div>
-              <div id="2"><%= teams[i].name %></div>
-              <div id="3"><%= teams[i].matchPlayed %></div>
-              <div id="4"><%= teams[i].win %></div>
-              <div id="5"><%= teams[i].draw %></div>
-              <div id="6"><%= teams[i].loss %></div>
-              <div id="7"><%= teams[i].goal %></div>
-              <div id="8"><%= teams[i].goalConceded %></div>
-              <div id="9"><%= teams[i].points %></div>
-              <div id="10"><%= teams[i].goalDifference %></div>
-            </div>
-            <% } %>
-          </ul>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>&nbsp;</th>
+                <th>Team</th>
+                <th>MP</th>
+                <th>W</th>
+                <th>D</th>
+                <th>L</th>
+                <th>G</th>
+                <th>GC</th>
+                <th>Pts</th>
+                <th>GD</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (let i = 0; i < teams.length; i++) { %>
+              <tr>
+                <td><%= i+1 %></td>
+                <td><%= teams[i].name %></td>
+                <td><%= teams[i].matchPlayed %></td>
+                <td><%= teams[i].win %></td>
+                <td><%= teams[i].draw %></td>
+                <td><%= teams[i].loss %></td>
+                <td><%= teams[i].goal %></td>
+                <td><%= teams[i].goalConceded %></td>
+                <td><%= teams[i].goalDifference %></td>
+                <td><%= teams[i].points %></td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
         </div>
       </div>
     </main>
