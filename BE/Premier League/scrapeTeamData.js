@@ -22,7 +22,8 @@ axios.get("https://footystats.org/england/premier-league#").then(({ data }) => {
       const loss = $team.find("td.loss").text();
       const goal = $team.find("td.gf").text();
       const goalConceded = $team.find("td.ga").text();
-
+      const points = $team.find("td.points.bold").text();
+      console.log(points);
       return {
         name: name,
         matchplayed: matchplayed,
@@ -31,6 +32,7 @@ axios.get("https://footystats.org/england/premier-league#").then(({ data }) => {
         loss: loss,
         goal: goal,
         goalConceded: goalConceded,
+        points: points,
       };
     })
     .toArray();
@@ -56,6 +58,7 @@ axios.get("https://footystats.org/england/premier-league#").then(({ data }) => {
       "goalDifference",
       teams[i].goal - teams[i].goalConceded
     );
+    teamsGraph.teams[i].addMetric("points", teams[i].points);
   }
 
   con.getConnection(function (err, connection) {
@@ -63,7 +66,7 @@ axios.get("https://footystats.org/england/premier-league#").then(({ data }) => {
     console.log("Connected!");
     for (let i = 0; i < teamsGraph.teams.length; i++) {
       connection.query(
-        "INSERT INTO teamsmetrics (teamName, matchplayed, win, draw, loss, goal, goalConceded) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO teamsmetrics (teamName, matchplayed, win, draw, loss, goal, goalConceded, points) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
         [
           teamsGraph.teams[i].name,
           teamsGraph.teams[i].metrics.matchplayed,
@@ -72,6 +75,7 @@ axios.get("https://footystats.org/england/premier-league#").then(({ data }) => {
           teamsGraph.teams[i].metrics.loss,
           teamsGraph.teams[i].metrics.goal,
           teamsGraph.teams[i].metrics.goalConceded,
+          teamsGraph.teams[i].metrics.points,
         ], // Pass both todo and date values as an array
         function (err, result) {
           if (err) {
