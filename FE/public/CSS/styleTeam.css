@@ -1,0 +1,113 @@
+body{
+    background-color: #D8D9DA;
+}
+#navBar{
+    background-color: rgba(0, 0, 0, 0.834);
+}
+#lionDiv{
+    color: white;
+    font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+}
+.nav-item .nav-link.active{
+    color: white;
+    padding-bottom: 11px;
+    font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+}
+.nav-item .nav-link.active:hover{
+    background-color: #FFC94A;
+    color:black;
+}
+#Lion{
+    height: 30px;
+    width: 30px;
+}
+#containerLion{
+    font-size: larger;
+} 
+#mainBox{
+    width: 50%;
+    height: 60vh;
+    margin-top: 10vh;
+    position: relative;
+    background-color: white;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+#mainBox div{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1%;
+    border-radius: 20px;
+}
+
+#chart{
+    background-color: rgb(245, 48, 48);
+    /* border-radius: 20px; */
+    margin-top: 3.5%;
+    margin-left:2%;
+    position: relative;
+    height: 25vh;
+    width:450px;
+    font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; 
+    overflow: auto;
+}
+#chart:hover{
+    background-color:rgba(0, 0, 0, 0.834);
+    color:white;
+}
+#chart h1{
+    text-align: center;
+    margin-left: 100%;
+}
+#dtAna{
+    background-color: #5e22d7;
+    color:black;
+    margin-top: 3.5%;
+    margin-left:2%;
+    margin-right: 2%;
+    position: relative;
+    width:450px;
+    font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; 
+    height: 25vh;
+    overflow: auto;
+}
+#dtAna h1{
+    margin-left: 35%;
+}
+#dtAna:hover{
+    background-color:rgba(0, 0, 0, 0.834);
+    color:white;
+}
+#winRate{
+    background-color: #F0A500;
+    color:white;
+    margin-left:2%;
+    position: relative;
+    text-align: center;
+    width:450px;
+    font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; 
+    height: 25vh;
+    overflow: auto;
+}
+#winRate:hover{
+    background-color: rgba(0, 0, 0, 0.834);
+    color:black;
+}
+#fixture{
+    background-color: rgb(7, 108, 0);;
+    margin-right: 2%;
+    margin-left: 2%;
+    position: relative;
+    width:450px;
+    font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; 
+    height: 25vh;
+    overflow: auto;
+}
+#fixture h1{
+    margin-left: 120%;
+}
+#fixture:hover{
+    background-color:rgba(0, 0, 0, 0.834);
+    color:white;
+}
