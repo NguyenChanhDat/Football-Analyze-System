@@ -24,24 +24,51 @@ body{
 #containerLion{
     font-size: larger;
 } 
-#boardHeader{
-    display: flex;
-    background-color: rgba(0, 0, 0, 0.834);
-    color:white;
-    font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
-}
-#mainBox{
+
+/* #mainBox{
     width: 80%;
     height: auto;
     background-color: white;
     border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     padding: 1%;
+    padding-top: 32px;
     /* align-items: center; */
     /* display: flex; */
-    overflow: auto;
-    margin-top: 10vh;
-}
+    /* overflow: auto;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+}  */
 .table{
     font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+    width: 80%;
+    height: auto;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    margin-left: 10%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+thead tr th{
+    font-weight: normal;
+}
+
+/*第一欄第一列：左上*/
+tr:first-child th:first-child{
+    border-top-left-radius: 15px;
+  }
+  /*第一欄最後列：左下*/
+tr:last-child td:first-child{
+    border-bottom-left-radius: 15px;
+  }
+  /*最後欄第一列：右上*/
+tr:first-child th:last-child{
+    border-top-right-radius: 15px;
+  }
+  /*最後欄第一列：右下*/
+tr:last-child td:last-child{
+    border-bottom-right-radius: 15px;
+  }
+#points{
+    font-weight: bold;
 }

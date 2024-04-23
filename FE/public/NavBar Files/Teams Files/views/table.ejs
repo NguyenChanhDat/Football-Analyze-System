@@ -68,42 +68,40 @@
     </nav>
 
     <main>
-      <div id="mainBox" class="container">
-        <div>
-          <table class="table">
-            <thead>
-              <tr>
-                <th>&nbsp;</th>
-                <th>Team</th>
-                <th>MP</th>
-                <th>W</th>
-                <th>D</th>
-                <th>L</th>
-                <th>G</th>
-                <th>GC</th>
-                <th>Pts</th>
-                <th>GD</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% for (let i = 0; i < teams.length; i++) { %>
-              <tr>
-                <td><%= i+1 %></td>
-                <td><%= teams[i].name %></td>
-                <td><%= teams[i].matchPlayed %></td>
-                <td><%= teams[i].win %></td>
-                <td><%= teams[i].draw %></td>
-                <td><%= teams[i].loss %></td>
-                <td><%= teams[i].goal %></td>
-                <td><%= teams[i].goalConceded %></td>
-                <td><%= teams[i].goalDifference %></td>
-                <td><%= teams[i].points %></td>
-              </tr>
-              <% } %>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <!-- <div class="container-fluid" id="mainBox"> -->
+      <table class="table">
+        <thead class="table-dark">
+          <tr>
+            <th>&nbsp;</th>
+            <th>Team</th>
+            <th>MP</th>
+            <th>W</th>
+            <th>D</th>
+            <th>L</th>
+            <th>G</th>
+            <th>GC</th>
+            <th>GD</th>
+            <th>Pts</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (let i = 0; i < teams.length; i++) { %>
+          <tr>
+            <td><%= i+1 %></td>
+            <td><%= teams[i].name %></td>
+            <td><%= teams[i].matchPlayed %></td>
+            <td><%= teams[i].win %></td>
+            <td><%= teams[i].draw %></td>
+            <td><%= teams[i].loss %></td>
+            <td><%= teams[i].goal %></td>
+            <td><%= teams[i].goalConceded %></td>
+            <td><%= teams[i].goalDifference %></td>
+            <td id="points"><%= teams[i].points %></td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+      <!-- </div> -->
     </main>
     <footer>
       <!-- place footer here -->
