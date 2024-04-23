@@ -1,0 +1,52 @@
+body{
+    background-color: #D8D9DA;
+}
+#navBar{
+    background-color: rgba(0, 0, 0, 0.834);
+}
+#lionDiv{
+    color: white;
+    font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+}
+.nav-item .nav-link.active{
+    color: white;
+    padding-bottom: 11px;
+    font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+}
+.nav-item .nav-link.active:hover{
+    background-color: #FFC94A;
+    color:black;
+}
+#Lion{
+    height: 30px;
+    width: 30px;
+}
+#containerLion{
+    font-size: larger;
+} 
+#boardHeader{
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.834);
+    color:white;
+    font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+}
+#mainBox{
+    width: 80%;
+    height: auto;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    padding: 1%;
+    /* align-items: center; */
+    /* display: flex; */
+    overflow: auto;
+    margin-top: 10vh;
+}
+#teamsMetrics{
+    display: flex;
+    font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+}
+
+#teamsMetrics #1{
+    
+}
