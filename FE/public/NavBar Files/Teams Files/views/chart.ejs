@@ -77,9 +77,36 @@
     </nav>
 
     <main>
+      <div id="chartGoaltoPointParent">
+        <div id="chartGoaltoPoint"></div>
+        <p>Goal Score/Conceded & Point per Match(Top 10 team)</p>
+      </div>
       <div id="chart"></div>
-      <!--load chart.js file-->
-      <script src="../../../JS/chart.js"></script>
+
+      <script>
+        //chartGoaltoPoint visualize goal/point/match
+        let goalPerMatch = JSON.parse('<%- JSON.stringify(result[1]) %>');
+        let pointPerMatch = JSON.parse('<%- JSON.stringify(result[2]) %>');
+        let goalConceded = JSON.parse('<%- JSON.stringify(result[3]) %>');
+        let teamName = JSON.parse('<%- JSON.stringify(result[0]) %>');
+        let chartGoaltoPoint = bb.generate({
+          bindto: '#chartGoaltoPoint',
+          data: {
+            type: 'bar',
+            columns: [
+              ['Point per Match'].concat(pointPerMatch),
+              ['Goal per Match'].concat(goalPerMatch),
+              ['Goal Conceded per Match'].concat(goalConceded),
+            ],
+          },
+          axis: {
+            x: {
+              type: 'category',
+              categories: teamName,
+            },
+          },
+        });
+      </script>
     </main>
 
     <footer>

@@ -53,19 +53,19 @@ thead tr th{
     font-weight: normal;
 }
 
-/*第一欄第一列：左上*/
+/* border-radius for the table*/
 tr:first-child th:first-child{
     border-top-left-radius: 15px;
   }
-  /*第一欄最後列：左下*/
+  
 tr:last-child td:first-child{
     border-bottom-left-radius: 15px;
   }
-  /*最後欄第一列：右上*/
+  
 tr:first-child th:last-child{
     border-top-right-radius: 15px;
   }
-  /*最後欄第一列：右下*/
+  
 tr:last-child td:last-child{
     border-bottom-right-radius: 15px;
   }

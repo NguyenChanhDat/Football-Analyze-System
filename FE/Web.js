@@ -1,37 +1,39 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const path = require("path");
+const path = require('path');
 const router = express.Router();
-const mysql = require("mysql");
+const mysql = require('mysql');
 const con = mysql.createPool({
-  host: "localhost",
-  user: "sqluser",
-  password: "dat20112011",
-  database: "epl",
+  host: 'localhost',
+  user: 'sqluser',
+  password: 'dat20112011',
+  database: 'epl',
 });
 //Server is listening on port 8083
 app.listen(8083, () => {
   console.log(`App listening at port 8083`);
 });
-app.use(express.static("public"));
+app.use(express.static('public'));
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname + "/index.html"));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname + '/index.html'));
   //__dirname : It will resolve to your project folder.
 });
-app.use("/", router);
+app.use('/', router);
 
 // Setting EJS as the view engine
-app.set("view engine", "ejs");
+app.set('view engine', 'ejs');
 app.set(
-  "views",
-  path.join(__dirname, "/public/NavBar Files/Teams Files/views")
+  'views',
+  path.join(__dirname, '/public/NavBar Files/Teams Files/views')
 );
-app.get("/NavBar%20Files/Teams%20Files/table.html", (req, res) => {
+
+//retrieve team's data for table sorting
+app.get('/NavBar%20Files/Teams%20Files/table.html', (req, res) => {
   con.getConnection(function (err) {
     if (err) throw err;
     con.query(
-      "SELECT * FROM teamsMetrics ORDER BY points DESC, goalDifference DESC, goal DESC, goalConceded ASC",
+      'SELECT * FROM teamsMetrics ORDER BY points DESC, goalDifference DESC, goal DESC, goalConceded ASC',
       function (err, result, fields) {
         if (err) throw err;
         let teams = [];
@@ -48,12 +50,56 @@ app.get("/NavBar%20Files/Teams%20Files/table.html", (req, res) => {
             goalDifference: result[i].goalDifference,
           });
         }
-        res.render("table", { teams });
+        res.render('table', { teams });
       }
     );
   });
 });
 
-app.get("/NavBar%20Files/Teams%20Files/chart.html", (req, res) => {
-  res.render("chart");
+//retrieve team's data for chart building
+app.get('/NavBar%20Files/Teams%20Files/chart.html', (req, res) => {
+  con.getConnection(function (err, connection) {
+    if (err) {
+      reject(err);
+      return;
+    }
+    connection.query(
+      'SELECT * FROM teamsMetrics ORDER BY points DESC, goal DESC LIMIT 10',
+      function (err, queryResult, fields) {
+        connection.release(); // Release the connection when done with it
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        let result = [];
+        let teamName = [];
+        let teamGoalPerMatch = [];
+        let teamPointPerMatch = [];
+        let teamGoalConcededPerMatch = [];
+        for (let i = 0; i < 10; i++) {
+          teamName.push(queryResult[i].teamName);
+          teamGoalPerMatch.push(
+            (queryResult[i].goal / queryResult[i].matchplayed).toFixed(2)
+          );
+          teamPointPerMatch.push(
+            (queryResult[i].points / queryResult[i].matchplayed).toFixed(2)
+          );
+          teamGoalConcededPerMatch.push(
+            (queryResult[i].goalConceded / queryResult[i].matchplayed).toFixed(
+              2
+            )
+          );
+        }
+        result.push(
+          teamName,
+          teamGoalPerMatch,
+          teamPointPerMatch,
+          teamGoalConcededPerMatch
+        );
+        // console.log(result);
+        res.render('chart', { result });
+      }
+    );
+  });
 });
