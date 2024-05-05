@@ -82,35 +82,3 @@ async function terminateGetTeamMetrics() {
 }
 terminateGetTeamMetrics().then((response) => {});
 
-// Function to scrape players' data
-// for (let i = 0; i < teamMetricsURLName.length; i++) {
-//   async function scrapePlayersData() {
-//     try {
-//       const { data } = await axios.get(
-//         'https://footystats.org/clubs/' + teamMetricsURLName[i]
-//       );
-//       const $ = cheerio.load(data);
-
-//       const teamsName = $('.comparison-table-table .row .item.stat')
-//         .map((_, teamsName) => {
-//           const $teamsName = $(teamsName);
-//           return $teamsName.text();
-//         })
-//         .toArray();
-
-//       return teamsName; // Return the teamsName array
-//     } catch (error) {
-//       console.error("Error scraping teams' data:", error);
-//       return []; // Return an empty array in case of error
-//     }
-//   }
-
-//   (async () => {
-//     const teamsData = await scrapePlayersData();
-//     let result = teamsData.slice(33, 36);
-//     avgPoss[i] = result[0];
-//     avgPoss[i] = parseInt(avgPoss[i]);
-//     avgPoss[i] = ((avgPoss[i] / 100) * 90).toFixed(2);
-//   })();
-// }
-// console.log(avgPoss);
