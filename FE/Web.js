@@ -77,6 +77,8 @@ app.get('/NavBar%20Files/Teams%20Files/chart.html', (req, res) => {
         let teamGoalPerMatch = [];
         let teamPointPerMatch = [];
         let teamGoalConcededPerMatch = [];
+        let teamAvgPossession = [];
+        let teamGoalTotal = [];
         for (let i = 0; i < 10; i++) {
           teamName.push(queryResult[i].teamName);
           teamGoalPerMatch.push(
@@ -90,12 +92,16 @@ app.get('/NavBar%20Files/Teams%20Files/chart.html', (req, res) => {
               2
             )
           );
+          teamAvgPossession.push(queryResult[i].avgPossession);
+          teamGoalTotal.push(queryResult[i].goal);
         }
         result.push(
           teamName,
           teamGoalPerMatch,
           teamPointPerMatch,
-          teamGoalConcededPerMatch
+          teamGoalConcededPerMatch,
+          teamAvgPossession,
+          teamGoalTotal
         );
         // console.log(result);
         res.render('chart', { result });
