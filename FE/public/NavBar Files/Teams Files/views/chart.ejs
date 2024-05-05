@@ -78,17 +78,23 @@
 
     <main>
       <div id="chartGoaltoPointParent">
+        <p>Goal Score/Conceded & Point per Match(Top 10)</p>
         <div id="chartGoaltoPoint"></div>
-        <p>Goal Score/Conceded & Point per Match(Top 10 team)</p>
       </div>
-      <div id="chart"></div>
+      <div id="chartPossessiontoPointParent">
+        <p>Ball Possession & Point per Match(Top 10)</p>
+        <div id="chartPossessiontoPoint"></div>
+      </div>
 
       <script>
         //chartGoaltoPoint visualize goal/point/match
+        let teamName = JSON.parse('<%- JSON.stringify(result[0]) %>');
         let goalPerMatch = JSON.parse('<%- JSON.stringify(result[1]) %>');
         let pointPerMatch = JSON.parse('<%- JSON.stringify(result[2]) %>');
         let goalConceded = JSON.parse('<%- JSON.stringify(result[3]) %>');
-        let teamName = JSON.parse('<%- JSON.stringify(result[0]) %>');
+        let avgPossession = JSON.parse('<%- JSON.stringify(result[4]) %>');
+        let goalTotal = JSON.parse('<%- JSON.stringify(result[5]) %>');
+        //generate Chart Goal S/C to Points
         let chartGoaltoPoint = bb.generate({
           bindto: '#chartGoaltoPoint',
           data: {
@@ -97,6 +103,24 @@
               ['Point per Match'].concat(pointPerMatch),
               ['Goal per Match'].concat(goalPerMatch),
               ['Goal Conceded per Match'].concat(goalConceded),
+            ],
+          },
+          axis: {
+            x: {
+              type: 'category',
+              categories: teamName,
+            },
+          },
+        });
+
+        //generate Chart Ball Possession to Points
+        let chartPossessiontoPoint = bb.generate({
+          bindto: '#chartPossessiontoPoint',
+          data: {
+            type: 'bar',
+            columns: [
+              ['Total Goal'].concat(goalTotal),
+              ['Avg Ball Possession(minutes)'].concat(avgPossession),
             ],
           },
           axis: {

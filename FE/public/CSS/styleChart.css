@@ -31,3 +31,19 @@ body{
     text-align: center;
     font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
 }
+
+#chartGoaltoPointParent p{
+    padding-top: 1%;
+}
+
+#chartPossessiontoPointParent{
+    background-color: white;
+    border-radius: 15px;
+    margin-top: 2.5%;
+    text-align: center;
+    font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+}
+
+#chartPossessiontoPointParent p{
+    padding-top: 1%;
+}
