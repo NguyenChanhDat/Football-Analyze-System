@@ -1,5 +1,12 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const mysql = require('mysql');
+const con = mysql.createPool({
+  host: 'localhost',
+  user: 'sqluser',
+  password: 'dat20112011',
+  database: 'epl',
+});
 
 let teamsName = [
   'Arsenal',
@@ -45,8 +52,29 @@ let teamMetricsURLName = [
   'burnley-fc',
   'sheffield-united-fc',
 ];
+
+let matches = []; //GLOBAL VAR FOR MATCHES DATA
+
 async function scrapeH2H(i, j) {
-  if (i == 20 && j == 20) {
+  if (i == 2) {
+    console.log('END SCRAPING');
+    // STORE DATA INTO MYSQL
+    con.getConnection(function (err, connection) {
+      if (err) throw err;
+      console.log('Connected!');
+      for (let k = 0; k < matches.length; k++) {
+        connection.query(
+          'INSERT INTO h2h (homeTeam, awayTeam, result) VALUES (?, ?, ?)',
+          [matches[k].home, matches[k].away, matches[k].result],
+          function (err, result) {
+            if (err) {
+              connection.release(); // Release the connection if there's an error
+              throw err;
+            }
+          }
+        );
+      }
+    });
     return;
   }
   if (j == 20) {
@@ -74,31 +102,59 @@ async function scrapeH2H(i, j) {
           return matchTeams;
         })
         .toArray();
-      // let recArr = [];
-      // console.log(records[0].length);
-      // for (let i = 0; i < records[0].length / 18; i++) {
-      //   recArr.push(records[0].slice(i * 18, i * 18 + 18));
-      // }
-      console.log(records);
+      let recArr = [];
+      let oneMatchStringLength = teamsName[i].length + teamsName[j].length + 4;
+      // console.log(oneMatchStringLength);
+      for (let k = 0; k < records[0].length / oneMatchStringLength; k++) {
+        recArr.push(
+          records[0].slice(
+            k * oneMatchStringLength,
+            k * oneMatchStringLength + oneMatchStringLength
+          )
+        );
+      }
+      for (let k = 0; k < recArr.length; k++) {
+        let match = {};
+        if (recArr[k].slice(0, teamsName[i].length) == teamsName[i]) {
+          match.home = teamsName[i];
+          match.away = teamsName[j];
+          match.result =
+            recArr[k].slice(teamsName[i].length + 1, teamsName[i].length + 2) +
+            '-' +
+            recArr[k].slice(
+              teamsName[i].length + 2 + teamsName[j].length + 1,
+              recArr[k].length
+            );
+        } else {
+          match.home = teamsName[j];
+          match.away = teamsName[i];
+          match.result =
+            recArr[k].slice(teamsName[j].length + 1, teamsName[j].length + 2) +
+            '-' +
+            recArr[k].slice(
+              teamsName[j].length + 2 + teamsName[i].length + 1,
+              recArr[k].length
+            );
+        }
+        matches.push(match);
+      }
     })
     .then((response) => {
+      console.log(
+        'Finished scraping matches between ' +
+          teamsName[i] +
+          ' and ' +
+          teamsName[j]
+      );
+      scrapeH2H(i, j + 1);
+    })
+    .catch((error) => {
+      console.log('Error Scraping ' + teamsName[i] + ' vs ' + teamsName[j]);
       scrapeH2H(i, j + 1);
     });
-  // .then((response2) => {
-  //   scrapeH2H(i + 1, j);
-  // });
 }
 
 async function terminate(i) {
   scrapeH2H(i, i + 1);
 }
 terminate(0);
-// async function secondLoop(i) {
-//   if (i == 20) {
-//     return;
-//   }
-//   terminate(i).then((response) => {
-//     secondLoop(i + 1);
-//   });
-// }
-// secondLoop(0);
