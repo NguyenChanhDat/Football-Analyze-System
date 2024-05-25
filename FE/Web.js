@@ -9,6 +9,7 @@ const con = mysql.createPool({
   password: 'dat20112011',
   database: 'epl',
 });
+
 //Server is listening on port 8083
 app.listen(8083, () => {
   console.log(`App listening at port 8083`);
@@ -108,4 +109,24 @@ app.get('/NavBar%20Files/Teams%20Files/chart.html', (req, res) => {
       }
     );
   });
+});
+
+app.get('/NavBar%20Files/Teams%20Files/winRate.html', (req, res) => {
+  // con.getConnection(function (err, connection) {
+  //   if (err) {
+  //     reject(err);
+  //     return;
+  //   }
+  //   connection.query(
+  //     'SELECT * FROM h2h ORDER BY points DESC, goal DESC LIMIT 10',
+  //     function (err, queryResult, fields) {
+  //       connection.release(); // Release the connection when done with it
+  //       if (err) {
+  //         reject(err);
+  //         return;
+  //       }
+  //     }
+  //   );
+  // });
+  res.render('winRate');
 });

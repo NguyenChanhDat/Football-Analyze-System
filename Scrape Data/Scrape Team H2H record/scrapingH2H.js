@@ -56,7 +56,7 @@ let teamMetricsURLName = [
 let matches = []; //GLOBAL VAR FOR MATCHES DATA
 
 async function scrapeH2H(i, j) {
-  if (i == 2) {
+  if (i == 19) {
     console.log('END SCRAPING');
     // STORE DATA INTO MYSQL
     con.getConnection(function (err, connection) {
@@ -74,6 +74,7 @@ async function scrapeH2H(i, j) {
           }
         );
       }
+      console.log('Finished Storing Data');
     });
     return;
   }
@@ -157,4 +158,4 @@ async function scrapeH2H(i, j) {
 async function terminate(i) {
   scrapeH2H(i, i + 1);
 }
-terminate(0);
+terminate(18);
