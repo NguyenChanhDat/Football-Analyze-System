@@ -69,97 +69,60 @@
 
     <main>
       <div>
-        <!-- <form action="http://localhost:8083/calcRate" method="POST"> -->
-        <div class="container-fluid" id="mainBox">
-          <div id="teamA">
-            <ul class="nav">
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link link-secondary dropdown-toggle"
-                  data-bs-toggle="dropdown"
-                  href="#"
-                  role="button"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                  >Pick Team A</a
-                >
-                <div class="dropdown-menu overflow-y-scroll">
-                  <a class="dropdown-item" href="#">Arsenal FC</a>
-                  <a class="dropdown-item" href="#">Manchester City FC</a>
-                  <a class="dropdown-item" href="#">Liverpool FC</a>
-                  <a class="dropdown-item" href="#">Aston Villa FC</a>
-                  <a class="dropdown-item" href="#">Tottenham Hotspur FC</a>
-                  <a class="dropdown-item" href="#">Newcastle United FC</a>
-                  <a class="dropdown-item" href="#">Manchester United FC</a>
-                  <a class="dropdown-item" href="#">Chelsea FC</a>
-                  <a class="dropdown-item" href="#">West Ham United FC</a>
-                  <a class="dropdown-item" href="#">AFC Bournemouth</a>
-                  <a class="dropdown-item" href="#"
-                    >Wolverhampton Wanderers FC</a
-                  >
-                  <a class="dropdown-item" href="#">Fulham FC</a>
-                  <a class="dropdown-item" href="#"
-                    >Brighton & Hove Albion FC</a
-                  >
-                  <a class="dropdown-item" href="#">Crystal Palace FC</a>
-                  <a class="dropdown-item" href="#">Brentford FCd</a>
-                  <a class="dropdown-item" href="#">Everton FC</a>
-                  <a class="dropdown-item" href="#">Nottingham Forest FC</a>
-                  <a class="dropdown-item" href="#">Luton Town FC</a>
-                  <a class="dropdown-item" href="#">Burnley FC</a>
-                  <a class="dropdown-item" href="#">Sheffield United FC</a>
-                </div>
-              </li>
-            </ul>
+        <form
+          action="http://localhost:8083/NavBar%20Files/Teams%20Files/winRate.html"
+          method="GET"
+        >
+          <div class="form-group">
+            <label for="sel1">First Team (select):</label>
+            <select class="form-control" id="selectTeam" name="firstTeam">
+              <option>Arsenal FC</option>
+              <option>Manchester City FC</option>
+              <option>Liverpool FC</option>
+              <option>Aston Villa FC</option>
+              <option>Tottenham Hotspur FC</option>
+              <option>Newcastle United FC</option>
+              <option>Manchester United FC</option>
+              <option>Chelsea FC</option>
+              <option>West Ham United FC</option>
+              <option>AFC Bournemouth</option>
+              <option>Wolverhampton Wanderers FC</option>
+              <option>Fulham FC</option>
+              <option>Brighton & Hove Albion FC</option>
+              <option>Crystal Palace FC</option>
+              <option>Brentford FC</option>
+              <option>Everton FC</option>
+              <option>Nottingham Forest FC</option>
+              <option>Luton Town FC</option>
+              <option>Burnley FC</option>
+              <option>Sheffield United FC</option>
+            </select>
+            <label for="sel1">Second Team (select):</label>
+            <select class="form-control" id="selectTeam" name="secondTeam">
+              <option>Arsenal FC</option>
+              <option>Manchester City FC</option>
+              <option>Liverpool FC</option>
+              <option>Aston Villa FC</option>
+              <option>Tottenham Hotspur FC</option>
+              <option>Newcastle United FC</option>
+              <option>Manchester United FC</option>
+              <option>Chelsea FC</option>
+              <option>West Ham United FC</option>
+              <option>AFC Bournemouth</option>
+              <option>Wolverhampton Wanderers FC</option>
+              <option>Fulham FC</option>
+              <option>Brighton & Hove Albion FC</option>
+              <option>Crystal Palace FC</option>
+              <option>Brentford FC</option>
+              <option>Everton FC</option>
+              <option>Nottingham Forest FC</option>
+              <option>Luton Town FC</option>
+              <option>Burnley FC</option>
+              <option>Sheffield United FC</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Submit</button>
           </div>
-          <div id="teamB">
-            <ul class="nav">
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link link-light dropdown-toggle"
-                  data-bs-toggle="dropdown"
-                  href="#"
-                  role="button"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                  >Pick Team B</a
-                >
-                <div class="dropdown-menu overflow-y-scroll">
-                  <a class="dropdown-item" href="#">Arsenal FC</a>
-                  <a class="dropdown-item" href="#">Manchester City FC</a>
-                  <a class="dropdown-item" href="#">Liverpool FC</a>
-                  <a class="dropdown-item" href="#">Aston Villa FC</a>
-                  <a class="dropdown-item" href="#">Tottenham Hotspur FC</a>
-                  <a class="dropdown-item" href="#">Newcastle United FC</a>
-                  <a class="dropdown-item" href="#">Manchester United FC</a>
-                  <a class="dropdown-item" href="#">Chelsea FC</a>
-                  <a class="dropdown-item" href="#">West Ham United FC</a>
-                  <a class="dropdown-item" href="#">AFC Bournemouth</a>
-                  <a class="dropdown-item" href="#"
-                    >Wolverhampton Wanderers FC</a
-                  >
-                  <a class="dropdown-item" href="#">Fulham FC</a>
-                  <a class="dropdown-item" href="#"
-                    >Brighton & Hove Albion FC</a
-                  >
-                  <a class="dropdown-item" href="#">Crystal Palace FC</a>
-                  <a class="dropdown-item" href="#">Brentford FCd</a>
-                  <a class="dropdown-item" href="#">Everton FC</a>
-                  <a class="dropdown-item" href="#">Nottingham Forest FC</a>
-                  <a class="dropdown-item" href="#">Luton Town FC</a>
-                  <a class="dropdown-item" href="#">Burnley FC</a>
-                  <a class="dropdown-item" href="#">Sheffield United FC</a>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div id="calButton">
-          <button type="submit" class="btn mb-2 btn-warning">
-            Calculate Win/Loss Rate
-          </button>
-        </div>
+        </form>
       </div>
     </main>
     <footer>

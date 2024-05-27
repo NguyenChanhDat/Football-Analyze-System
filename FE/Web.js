@@ -10,11 +10,16 @@ const con = mysql.createPool({
   database: 'epl',
 });
 
+const bodyParser = require('body-parser');
+// Parse URL-encoded bodies (as sent by HTML forms)
+app.use(bodyParser.urlencoded({ extended: true }));
+
 //Server is listening on port 8083
 app.listen(8083, () => {
   console.log(`App listening at port 8083`);
 });
-app.use(express.static('public'));
+//static files
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/index.html'));
@@ -112,6 +117,8 @@ app.get('/NavBar%20Files/Teams%20Files/chart.html', (req, res) => {
 });
 
 app.get('/NavBar%20Files/Teams%20Files/winRate.html', (req, res) => {
+  console.log(req.query.firstTeam);
+  console.log(req.query.secondTeam);
   // con.getConnection(function (err, connection) {
   //   if (err) {
   //     reject(err);
@@ -130,3 +137,27 @@ app.get('/NavBar%20Files/Teams%20Files/winRate.html', (req, res) => {
   // });
   res.render('winRate');
 });
+
+// app.get('/calcRate', (req, res) => {
+//   console.log(req.query.firstTeam);
+//   console.log(req.query.secondTeam);
+// });
+
+// app.post('/calcRate', (req, res) => {
+//   if (req.body.firstTeam == req.body.secondTeam) {
+//     res.redirect('/NavBar%20Files/Teams%20Files/winRate.html');
+//   } else {
+//     let urlH2H =
+//       '/calcRate/' + req.body.firstTeam + '/vs/' + req.body.secondTeam;
+//     firstTeamName = req.body.firstTeam;
+//     secondTeamName = req.body.secondTeam;
+//     console.log(urlH2H);
+//     res.redirect(urlH2H);
+//   }
+// });
+// // console.log('/calcRate' + firstTeamName + '/vs/' + secondTeamName);
+
+// app.get('/calcRate/:firstTeam/vs/:secondTeam', (req, res) => {
+//   console.log(req.params);
+//   res.render('winRateH2H');
+// });
