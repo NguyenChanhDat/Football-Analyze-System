@@ -69,60 +69,80 @@
 
     <main>
       <div>
-        <form
-          action="http://localhost:8083/NavBar%20Files/Teams%20Files/winRate.html"
-          method="GET"
-        >
-          <div class="form-group">
-            <label for="sel1">First Team (select):</label>
-            <select class="form-control" id="selectTeam" name="firstTeam">
-              <option>Arsenal</option>
-              <option>Manchester City</option>
-              <option>Liverpool</option>
-              <option>Aston Villa</option>
-              <option>Tottenham Hotspur</option>
-              <option>Newcastle United</option>
-              <option>Manchester United</option>
-              <option>Chelsea</option>
-              <option>West Ham United</option>
-              <option>AFC Bournemouth</option>
-              <option>Wolverhampton Wanderers</option>
-              <option>Fulham</option>
-              <option>Brighton & Hove Albion</option>
-              <option>Crystal Palace</option>
-              <option>Brentford</option>
-              <option>Everton</option>
-              <option>Nottingham Forest</option>
-              <option>Luton Town</option>
-              <option>Burnley</option>
-              <option>Sheffield United</option>
-            </select>
-            <label for="sel1">Second Team (select):</label>
-            <select class="form-control" id="selectTeam" name="secondTeam">
-              <option>Arsenal</option>
-              <option>Manchester City</option>
-              <option>Liverpool</option>
-              <option>Aston Villa</option>
-              <option>Tottenham Hotspur</option>
-              <option>Newcastle United</option>
-              <option>Manchester United</option>
-              <option>Chelsea</option>
-              <option>West Ham United</option>
-              <option>AFC Bournemouth</option>
-              <option>Wolverhampton Wanderers</option>
-              <option>Fulham</option>
-              <option>Brighton & Hove Albion</option>
-              <option>Crystal Palace</option>
-              <option>Brentford</option>
-              <option>Everton</option>
-              <option>Nottingham Forest</option>
-              <option>Luton Town</option>
-              <option>Burnley</option>
-              <option>Sheffield United</option>
-            </select>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </div>
-        </form>
+        <div class="container" id="pickBox">
+          <form
+            action="http://localhost:8083/NavBar%20Files/Teams%20Files/winRate.html"
+            method="GET"
+          >
+            <div class="form-group">
+              <div class="container-fluid" id="teamBox">
+                <div id="firstTeam">
+                  <label for="sel1">First Team:</label>
+                  <select
+                    class="form-control text-center"
+                    id="selectTeam"
+                    name="firstTeam"
+                    style="border-radius: 20px"
+                  >
+                    <option>Pick a Team...</option>
+                    <option>Arsenal</option>
+                    <option>Manchester City</option>
+                    <option>Liverpool</option>
+                    <option>Aston Villa</option>
+                    <option>Tottenham Hotspur</option>
+                    <option>Newcastle United</option>
+                    <option>Manchester United</option>
+                    <option>Chelsea</option>
+                    <option>West Ham United</option>
+                    <option>AFC Bournemouth</option>
+                    <option>Wolverhampton Wanderers</option>
+                    <option>Fulham</option>
+                    <option>Brighton & Hove Albion</option>
+                    <option>Crystal Palace</option>
+                    <option>Brentford</option>
+                    <option>Everton</option>
+                    <option>Nottingham Forest</option>
+                    <option>Luton Town</option>
+                    <option>Burnley</option>
+                    <option>Sheffield United</option>
+                  </select>
+                </div>
+                <div id="secondTeam">
+                  <label for="sel1">Second Team:</label>
+                  <select
+                    class="form-control text-center"
+                    id="selectTeam"
+                    name="secondTeam"
+                    style="border-radius: 20px"
+                  >
+                    <option>Pick a Team...</option>
+                    <option>Arsenal</option>
+                    <option>Manchester City</option>
+                    <option>Liverpool</option>
+                    <option>Aston Villa</option>
+                    <option>Tottenham Hotspur</option>
+                    <option>Newcastle United</option>
+                    <option>Manchester United</option>
+                    <option>Chelsea</option>
+                    <option>West Ham United</option>
+                    <option>AFC Bournemouth</option>
+                    <option>Wolverhampton Wanderers</option>
+                    <option>Fulham</option>
+                    <option>Brighton & Hove Albion</option>
+                    <option>Crystal Palace</option>
+                    <option>Brentford</option>
+                    <option>Everton</option>
+                    <option>Nottingham Forest</option>
+                    <option>Luton Town</option>
+                    <option>Burnley</option>
+                    <option>Sheffield United</option>
+                  </select>
+                </div>
+              </div>
+              <button type="submit">Calculate Win/Loss Probability</button>
+            </div>
+          </form>
+        </div>
       </div>
     </main>
     <footer>

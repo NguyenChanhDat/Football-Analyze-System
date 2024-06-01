@@ -119,29 +119,15 @@ app.get('/NavBar%20Files/Teams%20Files/chart.html', (req, res) => {
 app.get('/NavBar%20Files/Teams%20Files/winRate.html', (req, res) => {
   console.log(req.query.firstTeam);
   console.log(req.query.secondTeam);
-  let teamOne = req.query.firstTeam;
-  let teamTwo = req.query.secondTeam;
-  // // eliminate the FC from the clubs' name
-  // //Exception for the damn Bournemouth :)))
-  // if (req.query.firstTeam == 'AFC Bournemouth') {
-  //   let teamOne = req.query.firstTeam.slice(3, req.query.firstTeam.length);
-  //   let teamTwo = req.query.secondTeam.slice(
-  //     0,
-  //     req.query.secondTeamTeam.length - 2
-  //   );
-  // } else if (req.query.secondTeam == 'AFC Bournemouth') {
-  //   let teamTwo = req.query.firstTeam.slice(3, req.query.firstTeam.length);
-  //   let teamOne = req.query.secondTeam.slice(
-  //     0,
-  //     req.query.secondTeamTeam.length - 2
-  //   );
-  // } else {
-  //   let teamOne = req.query.firstTeam.slice(0, req.query.firstTeam.length - 2);
-  //   let teamTwo = req.query.secondTeam.slice(
-  //     0,
-  //     req.query.secondTeamTeam.length - 2
-  //   );
+  // if (
+  //   req.query.firstTeam != 'AFC Bournemouth' &&
+  //   req.query.secondTeam != 'AFC Bournemouth'
+  // ) {
+  //   var teamOne = req.query.firstTeam + ' FC';
+  //   var teamTwo = req.query.secondTeam + ' FC';
   // }
+  var teamOne = req.query.firstTeam;
+  var teamTwo = req.query.secondTeam;
 
   con.getConnection(function (err, connection) {
     if (err) {
@@ -153,16 +139,23 @@ app.get('/NavBar%20Files/Teams%20Files/winRate.html', (req, res) => {
       'select *from h2h where ((homeTeam in(?,?)) and (awayTeam in(?,?)))',
       [teamOne, teamTwo, teamOne, teamTwo],
       function (err, queryResult, fields) {
-        console.log(queryResult);
-        let winLossArr = [];
+        // console.log(queryResult);
+        let aWin = 0;
+        let bWin = 0;
+        let arrWinRateA = [];
+        let arrWinRateB = [];
+
+        //cal teamOne or Two win rate after each match
         for (let i = 0; i < queryResult.length; i++) {
           if (
+            //a Draw
             (queryResult[i].homeTeam == teamOne ||
               queryResult[i].awayTeam == teamOne) &&
             queryResult[i].result.slice(0, 1) ==
               queryResult[i].result.slice(2, 3)
           ) {
-            winLossArr.push(2); //2 mean a draw
+            arrWinRateA.push(((aWin / (i + 1)) * 100).toFixed(2));
+            arrWinRateB.push(((bWin / (i + 1)) * 100).toFixed(2));
           } else if (
             (queryResult[i].homeTeam == teamOne &&
               queryResult[i].result.slice(0, 1) >
@@ -171,36 +164,42 @@ app.get('/NavBar%20Files/Teams%20Files/winRate.html', (req, res) => {
               queryResult[i].result.slice(0, 1) <
                 queryResult[i].result.slice(2, 3))
           ) {
-            winLossArr.push(1); // 1 as teamOne win
-          } else {
-            winLossArr.push(0); //0 as teamTwo win
-          }
-        }
-
-        //Cal winRate after each ROund
-        let aWin = 0;
-        let bWin = 0;
-        let arrWinRateA = [];
-        let arrWinRateB = [];
-
-        for (let i = 0; i < winLossArr.length; i++) {
-          if (winLossArr[i] == 1) {
-            aWin++;
+            // 1 as teamOne win
+            aWin++; //teamOne win
             arrWinRateA.push(((aWin / (i + 1)) * 100).toFixed(2));
             arrWinRateB.push(((bWin / (i + 1)) * 100).toFixed(2));
-          } else if (winLossArr[i] == 0) {
+          } else {
+            //teamTwo win
             bWin++;
             arrWinRateB.push(((bWin / (i + 1)) * 100).toFixed(2));
             arrWinRateA.push(((aWin / (i + 1)) * 100).toFixed(2));
-          } else {
-            arrWinRateA.push(((aWin / (i + 1)) * 100).toFixed(2));
-            arrWinRateB.push(((bWin / (i + 1)) * 100).toFixed(2));
           }
         }
+
         console.log(arrWinRateA);
         console.log(arrWinRateB);
-
-        console.log(winLossArr);
+        let goalScoreA = [];
+        let goalScoreB = [];
+        let goalConcededA = [];
+        let goalConcededB = [];
+        for (let i = 0; i < queryResult.length; i++) {
+          if (queryResult[i].homeTeam == teamOne) {
+            goalScoreA.push(queryResult[i].result.slice(0, 1)); //Goal score TeamOne each round
+            goalScoreB.push(queryResult[i].result.slice(2, 3)); //Goal score TeamTwo each round
+            goalConcededB.push(queryResult[i].result.slice(0, 1)); //Goal Conceded TeamTwo each round
+            goalConcededA.push(queryResult[i].result.slice(2, 3)); //Goal Conceded TeamOne each round
+          } else {
+            goalScoreB.push(queryResult[i].result.slice(0, 1)); //Goal score TeamTwo each round
+            goalScoreA.push(queryResult[i].result.slice(2, 3)); //Goal score TeamOne each round
+            goalConcededA.push(queryResult[i].result.slice(0, 1)); //Goal Conceded TeamOne each round
+            goalConcededB.push(queryResult[i].result.slice(2, 3)); //Goal Conceded TeamTwo each round
+          }
+        }
+        console.log(goalScoreA);
+        console.log(goalScoreB);
+        console.log(goalConcededA);
+        console.log(goalConcededB);
+        // console.log(winLossArr);
         res.render('winRate'); // template EJS
         connection.release(); // Release the connection when done with it
         if (err) {
@@ -211,27 +210,3 @@ app.get('/NavBar%20Files/Teams%20Files/winRate.html', (req, res) => {
     );
   });
 });
-
-// app.get('/calcRate', (req, res) => {
-//   console.log(req.query.firstTeam);
-//   console.log(req.query.secondTeam);
-// });
-
-// app.post('/calcRate', (req, res) => {
-//   if (req.body.firstTeam == req.body.secondTeam) {
-//     res.redirect('/NavBar%20Files/Teams%20Files/winRate.html');
-//   } else {
-//     let urlH2H =
-//       '/calcRate/' + req.body.firstTeam + '/vs/' + req.body.secondTeam;
-//     firstTeamName = req.body.firstTeam;
-//     secondTeamName = req.body.secondTeam;
-//     console.log(urlH2H);
-//     res.redirect(urlH2H);
-//   }
-// });
-// // console.log('/calcRate' + firstTeamName + '/vs/' + secondTeamName);
-
-// app.get('/calcRate/:firstTeam/vs/:secondTeam', (req, res) => {
-//   console.log(req.params);
-//   res.render('winRateH2H');
-// });

@@ -24,18 +24,7 @@ body{
 #containerLion{
     font-size: larger;
 } 
-#mainBox {
-    width: 40%;
-    height: 38vh;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    align-items: center;
-    display: flex;
-    overflow: hidden;
-    margin-top: 20vh;
-    position: relative;
-}
+
 #teamA, #teamB{
     font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
     font-size: xx-large;
@@ -53,10 +42,7 @@ body{
 #teamA a{
     padding-left: 18%;
 }
-/* #introduceBox p {
-    font-size: 22px;
-    font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif; 
-} */
+
 
 #teamB {
     text-align: center;
@@ -77,23 +63,55 @@ body{
     max-height: 280px;
     overflow-y: auto;
 }
-/* #introduceAuthor p {
-    padding-top: 30%;
-    font-size: 22px;
-    font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
-} */
-/* 
-#calButton{
-    margin-top: 3%;
-    padding-left: 43%;
-    font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
-    border-radius: 20px;
-}
-button{
-    background-color: #F0A500;
-    border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-} */
+
 .form-group{
     font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+}
+#pickBox{
+    width: 40%;
+    height: 38vh;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    align-items: center;
+    align-content: center;
+    display: flex;
+    overflow: hidden;
+    margin-top: 15vh;
+}
+#teamBox{
+
+    display:flex;
+    margin-right: 10%;
+    margin-left: 20px;
+}
+#firstTeam{
+    border-radius: 20px;
+    text-align: center;
+    background-color: #5e22d7;
+    color:white;
+}
+#secondTeam{
+    border-radius: 20px;
+    background-color: rgba(0, 0, 0, 0.834);
+    color:white;
+    text-align: center;
+    margin-left: 20px;
+}
+button{
+    border-radius: 7px;
+    border: 0px;
+    background-color: #FFC94A;
+    margin-top: 20px;
+    margin-left: 165px;
+    padding: 7px;
+
+}
+button:hover{
+    background-color: rgb(245, 48, 48);
+    color: white;
+}
+select:hover{
+    border: #5e22d7;
+    border: 2px;
 }
