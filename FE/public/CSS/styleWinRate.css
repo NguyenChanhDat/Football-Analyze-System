@@ -121,3 +121,14 @@ select:hover{
     text-align: center;
     margin-left: 40px;
 }
+#winRateBox{
+    display: flex;
+    width: 40%;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+#winRateBox div{
+    text-align: center;
+    margin: 30px;
+
+}

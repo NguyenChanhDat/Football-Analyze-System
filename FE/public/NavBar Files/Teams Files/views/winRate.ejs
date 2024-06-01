@@ -15,6 +15,14 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
+    <!-- Step 1) Load D3.js -->
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+
+    <!-- Step 2) Load billboard.js with style -->
+    <script src="../../../billboard.js/dist/billboard.js"></script>
+
+    <!-- Load with dark theme style -->
+    <link rel="stylesheet" href="../../../billboard.js/dist/theme/dark.css" />
   </head>
 
   <body>
@@ -153,6 +161,11 @@
             </div>
           </form>
         </div>
+      </div>
+      <div class="container bg-white" id="winRateBox">
+        <div id=""><%= winRateArr[0] %></div>
+        <div id=""><%= winRateArr[1] %></div>
+        <div id=""><%= winRateArr[2] %></div>
       </div>
     </main>
     <footer>

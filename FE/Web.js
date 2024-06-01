@@ -217,50 +217,115 @@ app.get('/NavBar%20Files/Teams%20Files/winRate.html', (req, res) => {
         }
 
         //Calc Matrix X * Matrix tX
-        let XtX =
-          1 +
-          (aWinArr[aWinArr.length - 1] - bWinArr[bWinArr.length - 1]) *
-            (aWinArr[aWinArr.length - 1] - bWinArr[bWinArr.length - 1]) +
-          (aLossArr[aLossArr.length - 1] - bLossArr[bLossArr.length - 1]) *
-            (aLossArr[aLossArr.length - 1] - bLossArr[bLossArr.length - 1]) +
-          (totalGoalScoreA - totalGoalScoreB) *
-            (totalGoalScoreA - totalGoalScoreB) +
-          (totalGoalConcededA - totalGoalConcededB) *
-            (totalGoalConcededA - totalGoalConcededB);
-        let winRatePast = arrWinRateA[arrWinRateA.length - 1];
-        let Beta = [];
-        //calc Matrix Beta
-        Beta.push((1 * (1 / XtX) * winRatePast).toFixed(2));
-        Beta.push(
-          (
-            (1 / XtX) *
-            winRatePast *
-            (aWinArr[aWinArr.length - 1] - bWinArr[bWinArr.length - 1])
-          ).toFixed(2)
+        function calWinRate(
+          aWinArr,
+          bWinArr,
+          totalGoalScoreA,
+          totalGoalScoreB,
+          totalGoalConcededA,
+          totalGoalConcededB,
+          arrWinRateA,
+          arrWinRateB,
+          aWinArr,
+          bWinArr,
+          aLossArr,
+          bLossArr
+        ) {
+          let XtX =
+            1 +
+            (aWinArr[aWinArr.length - 1] - bWinArr[bWinArr.length - 1]) *
+              (aWinArr[aWinArr.length - 1] - bWinArr[bWinArr.length - 1]) +
+            (aLossArr[aLossArr.length - 1] - bLossArr[bLossArr.length - 1]) *
+              (aLossArr[aLossArr.length - 1] - bLossArr[bLossArr.length - 1]) +
+            (totalGoalScoreA - totalGoalScoreB) *
+              (totalGoalScoreA - totalGoalScoreB) +
+            (totalGoalConcededA - totalGoalConcededB) *
+              (totalGoalConcededA - totalGoalConcededB);
+          let winRatePast = arrWinRateA[arrWinRateA.length - 1];
+          let Beta = [];
+          //calc Matrix Beta
+          Beta.push((1 * (1 / XtX) * winRatePast).toFixed(2));
+          Beta.push(
+            (
+              (1 / XtX) *
+              winRatePast *
+              (aWinArr[aWinArr.length - 1] - bWinArr[bWinArr.length - 1])
+            ).toFixed(2)
+          );
+          Beta.push(
+            (
+              (1 / XtX) *
+              winRatePast *
+              (aLossArr[aLossArr.length - 1] - bLossArr[bLossArr.length - 1])
+            ).toFixed(2)
+          );
+          Beta.push(
+            (
+              (1 / XtX) *
+              winRatePast *
+              (totalGoalScoreA - totalGoalScoreB)
+            ).toFixed(2)
+          );
+          Beta.push(
+            (
+              (1 / XtX) *
+              winRatePast *
+              (totalGoalConcededA - totalGoalConcededB)
+            ).toFixed(2)
+          );
+          let wrPredict =
+            parseFloat(Beta[0]) +
+            parseFloat(
+              Beta[1] *
+                (aWinArr[aWinArr.length - 1] - bWinArr[bWinArr.length - 1])
+            ) +
+            parseFloat(
+              Beta[2] *
+                (aLossArr[aLossArr.length - 1] - bLossArr[bLossArr.length - 1])
+            ) +
+            parseFloat(Beta[3] * (totalGoalScoreA - totalGoalScoreB)) +
+            parseFloat(Beta[4] * (totalGoalConcededA - totalGoalConcededB));
+          return wrPredict.toFixed(2);
+        }
+        let teamOneWinRate = calWinRate(
+          aWinArr,
+          bWinArr,
+          totalGoalScoreA,
+          totalGoalScoreB,
+          totalGoalConcededA,
+          totalGoalConcededB,
+          arrWinRateA,
+          arrWinRateB,
+          aWinArr,
+          bWinArr,
+          aLossArr,
+          bLossArr
         );
-        Beta.push(
-          (
-            (1 / XtX) *
-            winRatePast *
-            (aLossArr[aLossArr.length - 1] - bLossArr[bLossArr.length - 1])
-          ).toFixed(2)
+        let teamTwoWinRate = calWinRate(
+          bWinArr,
+          aWinArr,
+          totalGoalScoreB,
+          totalGoalScoreA,
+          totalGoalConcededB,
+          totalGoalConcededA,
+          arrWinRateB,
+          arrWinRateA,
+          bWinArr,
+          aWinArr,
+          bLossArr,
+          aLossArr
         );
-        Beta.push(
-          (
-            (1 / XtX) *
-            winRatePast *
-            (totalGoalScoreA - totalGoalScoreB)
-          ).toFixed(2)
-        );
-        Beta.push(
-          (
-            (1 / XtX) *
-            winRatePast *
-            (totalGoalConcededA - totalGoalConcededB)
-          ).toFixed(2)
-        );
-        console.log(Beta);
-        res.render('winRate'); // template EJS
+        var drawRate = (100 - teamOneWinRate - teamTwoWinRate).toFixed(2);
+        let winRateArr = [];
+        winRateArr.push(teamOneWinRate);
+        winRateArr.push(teamTwoWinRate);
+        winRateArr.push(drawRate);
+
+        console.log(teamOneWinRate + ' teamOneWinRate');
+        console.log(teamTwoWinRate + ' teamTwoWinRate');
+        console.log(drawRate + ' drawRate');
+        // console.log(100 - teamOneWinRate - teamTwoWinRate);
+        res.render('winRate', { winRateArr }); // template EJS
         connection.release(); // Release the connection when done with it
         if (err) {
           reject(err);
