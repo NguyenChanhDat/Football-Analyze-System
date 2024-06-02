@@ -311,23 +311,21 @@ app.get('/NavBar%20Files/Teams%20Files/winRate.html', (req, res) => {
             aLossArr
           );
           var drawRate = (100 - teamOneWinRate - teamTwoWinRate).toFixed(2);
-          let winRateArr = [
-            teamOne,
-            teamOneWinRate,
-            teamTwo,
-            teamTwoWinRate,
-            'Draw',
-            drawRate,
-          ];
-          // winRateArr.push(teamOneWinRate);
-          // winRateArr.push(teamTwoWinRate);
-          // winRateArr.push(drawRate);
+          let winRateObj = {
+            teamOneProp: teamOne,
+            teamOneWinRateProp: teamOneWinRate,
+            teamTwoProp: teamTwo,
+            teamTwoWinRateProp: teamTwoWinRate,
+            drawProp: 'Draw',
+            drawRateProp: drawRate,
+          };
+          
 
           console.log(teamOneWinRate + ' teamOneWinRate');
           console.log(teamTwoWinRate + ' teamTwoWinRate');
           console.log(drawRate + ' drawRate');
           // console.log(100 - teamOneWinRate - teamTwoWinRate);
-          res.render('winRate', { winRateArr }); // template EJS
+          res.render('winRate', { winRateObj }); // template EJS
           connection.release(); // Release the connection when done with it
           if (err) {
             reject(err);
