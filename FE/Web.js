@@ -119,219 +119,231 @@ app.get('/NavBar%20Files/Teams%20Files/chart.html', (req, res) => {
 app.get('/NavBar%20Files/Teams%20Files/winRate.html', (req, res) => {
   console.log(req.query.firstTeam);
   console.log(req.query.secondTeam);
-  // if (
-  //   req.query.firstTeam != 'AFC Bournemouth' &&
-  //   req.query.secondTeam != 'AFC Bournemouth'
-  // ) {
-  //   var teamOne = req.query.firstTeam + ' FC';
-  //   var teamTwo = req.query.secondTeam + ' FC';
-  // }
   var teamOne = req.query.firstTeam;
   var teamTwo = req.query.secondTeam;
-
-  con.getConnection(function (err, connection) {
-    if (err) {
-      reject(err);
-      return;
-    }
-    //retrieve data h2h between teams
-    connection.query(
-      'select *from h2h where ((homeTeam in(?,?)) and (awayTeam in(?,?)))',
-      [teamOne, teamTwo, teamOne, teamTwo],
-      function (err, queryResult, fields) {
-        // console.log(queryResult);
-        let aWin = 0;
-        let bWin = 0;
-        let aLoss = 0;
-        let bLoss = 0;
-        let aWinArr = [];
-        let bWinArr = [];
-        let aLossArr = [];
-        let bLossArr = [];
-        let arrWinRateA = [];
-        let arrWinRateB = [];
-
-        //cal teamOne or Two win rate after each match
-        for (let i = 0; i < queryResult.length; i++) {
-          if (
-            //a Draw
-            (queryResult[i].homeTeam == teamOne ||
-              queryResult[i].awayTeam == teamOne) &&
-            queryResult[i].result.slice(0, 1) ==
-              queryResult[i].result.slice(2, 3)
-          ) {
-            aWinArr.push(aWin); //A Win Array after Each Round
-            bWinArr.push(bWin); //B Win Array after Each Round
-            arrWinRateA.push(((aWin / (i + 1)) * 100).toFixed(2));
-            arrWinRateB.push(((bWin / (i + 1)) * 100).toFixed(2));
-          } else if (
-            (queryResult[i].homeTeam == teamOne &&
-              queryResult[i].result.slice(0, 1) >
-                queryResult[i].result.slice(2, 3)) ||
-            (queryResult[i].awayTeam == teamOne &&
-              queryResult[i].result.slice(0, 1) <
-                queryResult[i].result.slice(2, 3))
-          ) {
-            // 1 as teamOne win
-            aWin++; //teamOne win
-            bLoss++; //teamLoss win
-            aWinArr.push(aWin);
-            bWinArr.push(bWin);
-            aLossArr.push(aLoss);
-            bLossArr.push(bLoss);
-            arrWinRateA.push(((aWin / (i + 1)) * 100).toFixed(2));
-            arrWinRateB.push(((bWin / (i + 1)) * 100).toFixed(2));
-          } else {
-            //teamTwo win
-            bWin++;
-            aWinArr.push(aWin);
-            bWinArr.push(bWin);
-            //teamOne Loss
-            aLoss++;
-            aLossArr.push(aLoss);
-            bLossArr.push(bLoss);
-            arrWinRateB.push(((bWin / (i + 1)) * 100).toFixed(2));
-            arrWinRateA.push(((aWin / (i + 1)) * 100).toFixed(2));
-          }
-        }
-
-        console.log(arrWinRateA);
-        console.log(arrWinRateB);
-        let totalGoalScoreA = 0;
-        let totalGoalScoreB = 0;
-        let totalGoalConcededA = 0;
-        let totalGoalConcededB = 0;
-
-        for (let i = 0; i < queryResult.length; i++) {
-          if (queryResult[i].homeTeam == teamOne) {
-            totalGoalScoreA += parseInt(queryResult[i].result.slice(0, 1)); //Goal score TeamOne each round
-            totalGoalScoreB += parseInt(queryResult[i].result.slice(2, 3)); //Goal score TeamTwo each round
-            totalGoalConcededB += parseInt(queryResult[i].result.slice(0, 1)); //Goal Conceded TeamTwo each round
-            totalGoalConcededA += parseInt(queryResult[i].result.slice(2, 3)); //Goal Conceded TeamOne each round
-          } else {
-            totalGoalScoreB += parseInt(queryResult[i].result.slice(0, 1)); //Goal score TeamTwo each round
-            totalGoalScoreA += parseInt(queryResult[i].result.slice(2, 3)); //Goal score TeamOne each round
-            totalGoalConcededA += parseInt(queryResult[i].result.slice(0, 1)); //Goal Conceded TeamOne each round
-            totalGoalConcededB += parseInt(queryResult[i].result.slice(2, 3)); //Goal Conceded TeamTwo each round
-          }
-        }
-
-        //Calc Matrix X * Matrix tX
-        function calWinRate(
-          aWinArr,
-          bWinArr,
-          totalGoalScoreA,
-          totalGoalScoreB,
-          totalGoalConcededA,
-          totalGoalConcededB,
-          arrWinRateA,
-          arrWinRateB,
-          aWinArr,
-          bWinArr,
-          aLossArr,
-          bLossArr
-        ) {
-          let XtX =
-            1 +
-            (aWinArr[aWinArr.length - 1] - bWinArr[bWinArr.length - 1]) *
-              (aWinArr[aWinArr.length - 1] - bWinArr[bWinArr.length - 1]) +
-            (aLossArr[aLossArr.length - 1] - bLossArr[bLossArr.length - 1]) *
-              (aLossArr[aLossArr.length - 1] - bLossArr[bLossArr.length - 1]) +
-            (totalGoalScoreA - totalGoalScoreB) *
-              (totalGoalScoreA - totalGoalScoreB) +
-            (totalGoalConcededA - totalGoalConcededB) *
-              (totalGoalConcededA - totalGoalConcededB);
-          let winRatePast = arrWinRateA[arrWinRateA.length - 1];
-          let Beta = [];
-          //calc Matrix Beta
-          Beta.push((1 * (1 / XtX) * winRatePast).toFixed(2));
-          Beta.push(
-            (
-              (1 / XtX) *
-              winRatePast *
-              (aWinArr[aWinArr.length - 1] - bWinArr[bWinArr.length - 1])
-            ).toFixed(2)
-          );
-          Beta.push(
-            (
-              (1 / XtX) *
-              winRatePast *
-              (aLossArr[aLossArr.length - 1] - bLossArr[bLossArr.length - 1])
-            ).toFixed(2)
-          );
-          Beta.push(
-            (
-              (1 / XtX) *
-              winRatePast *
-              (totalGoalScoreA - totalGoalScoreB)
-            ).toFixed(2)
-          );
-          Beta.push(
-            (
-              (1 / XtX) *
-              winRatePast *
-              (totalGoalConcededA - totalGoalConcededB)
-            ).toFixed(2)
-          );
-          let wrPredict =
-            parseFloat(Beta[0]) +
-            parseFloat(
-              Beta[1] *
-                (aWinArr[aWinArr.length - 1] - bWinArr[bWinArr.length - 1])
-            ) +
-            parseFloat(
-              Beta[2] *
-                (aLossArr[aLossArr.length - 1] - bLossArr[bLossArr.length - 1])
-            ) +
-            parseFloat(Beta[3] * (totalGoalScoreA - totalGoalScoreB)) +
-            parseFloat(Beta[4] * (totalGoalConcededA - totalGoalConcededB));
-          return wrPredict.toFixed(2);
-        }
-        let teamOneWinRate = calWinRate(
-          aWinArr,
-          bWinArr,
-          totalGoalScoreA,
-          totalGoalScoreB,
-          totalGoalConcededA,
-          totalGoalConcededB,
-          arrWinRateA,
-          arrWinRateB,
-          aWinArr,
-          bWinArr,
-          aLossArr,
-          bLossArr
-        );
-        let teamTwoWinRate = calWinRate(
-          bWinArr,
-          aWinArr,
-          totalGoalScoreB,
-          totalGoalScoreA,
-          totalGoalConcededB,
-          totalGoalConcededA,
-          arrWinRateB,
-          arrWinRateA,
-          bWinArr,
-          aWinArr,
-          bLossArr,
-          aLossArr
-        );
-        var drawRate = (100 - teamOneWinRate - teamTwoWinRate).toFixed(2);
-        let winRateArr = [];
-        winRateArr.push(teamOneWinRate);
-        winRateArr.push(teamTwoWinRate);
-        winRateArr.push(drawRate);
-
-        console.log(teamOneWinRate + ' teamOneWinRate');
-        console.log(teamTwoWinRate + ' teamTwoWinRate');
-        console.log(drawRate + ' drawRate');
-        // console.log(100 - teamOneWinRate - teamTwoWinRate);
-        res.render('winRate', { winRateArr }); // template EJS
-        connection.release(); // Release the connection when done with it
-        if (err) {
-          reject(err);
-          return;
-        }
+  if (teamOne != undefined || teamTwo != undefined) {
+    con.getConnection(function (err, connection) {
+      if (err) {
+        reject(err);
+        return;
       }
-    );
-  });
+      //retrieve data h2h between teams
+      connection.query(
+        'select *from h2h where ((homeTeam in(?,?)) and (awayTeam in(?,?)))',
+        [teamOne, teamTwo, teamOne, teamTwo],
+        function (err, queryResult, fields) {
+          // console.log(queryResult);
+          let aWin = 0;
+          let bWin = 0;
+          let aLoss = 0;
+          let bLoss = 0;
+          let aWinArr = [];
+          let bWinArr = [];
+          let aLossArr = [];
+          let bLossArr = [];
+          let arrWinRateA = [];
+          let arrWinRateB = [];
+
+          //cal teamOne or Two win rate after each match
+          for (let i = 0; i < queryResult.length; i++) {
+            if (
+              //a Draw
+              (queryResult[i].homeTeam == teamOne ||
+                queryResult[i].awayTeam == teamOne) &&
+              queryResult[i].result.slice(0, 1) ==
+                queryResult[i].result.slice(2, 3)
+            ) {
+              aWinArr.push(aWin); //A Win Array after Each Round
+              bWinArr.push(bWin); //B Win Array after Each Round
+              arrWinRateA.push(((aWin / (i + 1)) * 100).toFixed(2));
+              arrWinRateB.push(((bWin / (i + 1)) * 100).toFixed(2));
+            } else if (
+              (queryResult[i].homeTeam == teamOne &&
+                queryResult[i].result.slice(0, 1) >
+                  queryResult[i].result.slice(2, 3)) ||
+              (queryResult[i].awayTeam == teamOne &&
+                queryResult[i].result.slice(0, 1) <
+                  queryResult[i].result.slice(2, 3))
+            ) {
+              // 1 as teamOne win
+              aWin++; //teamOne win
+              bLoss++; //teamLoss win
+              aWinArr.push(aWin);
+              bWinArr.push(bWin);
+              aLossArr.push(aLoss);
+              bLossArr.push(bLoss);
+              arrWinRateA.push(((aWin / (i + 1)) * 100).toFixed(2));
+              arrWinRateB.push(((bWin / (i + 1)) * 100).toFixed(2));
+            } else {
+              //teamTwo win
+              bWin++;
+              aWinArr.push(aWin);
+              bWinArr.push(bWin);
+              //teamOne Loss
+              aLoss++;
+              aLossArr.push(aLoss);
+              bLossArr.push(bLoss);
+              arrWinRateB.push(((bWin / (i + 1)) * 100).toFixed(2));
+              arrWinRateA.push(((aWin / (i + 1)) * 100).toFixed(2));
+            }
+          }
+
+          console.log(arrWinRateA);
+          console.log(arrWinRateB);
+          let totalGoalScoreA = 0;
+          let totalGoalScoreB = 0;
+          let totalGoalConcededA = 0;
+          let totalGoalConcededB = 0;
+
+          for (let i = 0; i < queryResult.length; i++) {
+            if (queryResult[i].homeTeam == teamOne) {
+              totalGoalScoreA += parseInt(queryResult[i].result.slice(0, 1)); //Goal score TeamOne each round
+              totalGoalScoreB += parseInt(queryResult[i].result.slice(2, 3)); //Goal score TeamTwo each round
+              totalGoalConcededB += parseInt(queryResult[i].result.slice(0, 1)); //Goal Conceded TeamTwo each round
+              totalGoalConcededA += parseInt(queryResult[i].result.slice(2, 3)); //Goal Conceded TeamOne each round
+            } else {
+              totalGoalScoreB += parseInt(queryResult[i].result.slice(0, 1)); //Goal score TeamTwo each round
+              totalGoalScoreA += parseInt(queryResult[i].result.slice(2, 3)); //Goal score TeamOne each round
+              totalGoalConcededA += parseInt(queryResult[i].result.slice(0, 1)); //Goal Conceded TeamOne each round
+              totalGoalConcededB += parseInt(queryResult[i].result.slice(2, 3)); //Goal Conceded TeamTwo each round
+            }
+          }
+
+          //Calc Matrix X * Matrix tX
+          function calWinRate(
+            aWinArr,
+            bWinArr,
+            totalGoalScoreA,
+            totalGoalScoreB,
+            totalGoalConcededA,
+            totalGoalConcededB,
+            arrWinRateA,
+            arrWinRateB,
+            aWinArr,
+            bWinArr,
+            aLossArr,
+            bLossArr
+          ) {
+            let XtX =
+              1 +
+              (aWinArr[aWinArr.length - 1] - bWinArr[bWinArr.length - 1]) *
+                (aWinArr[aWinArr.length - 1] - bWinArr[bWinArr.length - 1]) +
+              (aLossArr[aLossArr.length - 1] - bLossArr[bLossArr.length - 1]) *
+                (aLossArr[aLossArr.length - 1] -
+                  bLossArr[bLossArr.length - 1]) +
+              (totalGoalScoreA - totalGoalScoreB) *
+                (totalGoalScoreA - totalGoalScoreB) +
+              (totalGoalConcededA - totalGoalConcededB) *
+                (totalGoalConcededA - totalGoalConcededB);
+            let winRatePast = arrWinRateA[arrWinRateA.length - 1];
+            let Beta = [];
+            //calc Matrix Beta
+            Beta.push((1 * (1 / XtX) * winRatePast).toFixed(2));
+            Beta.push(
+              (
+                (1 / XtX) *
+                winRatePast *
+                (aWinArr[aWinArr.length - 1] - bWinArr[bWinArr.length - 1])
+              ).toFixed(2)
+            );
+            Beta.push(
+              (
+                (1 / XtX) *
+                winRatePast *
+                (aLossArr[aLossArr.length - 1] - bLossArr[bLossArr.length - 1])
+              ).toFixed(2)
+            );
+            Beta.push(
+              (
+                (1 / XtX) *
+                winRatePast *
+                (totalGoalScoreA - totalGoalScoreB)
+              ).toFixed(2)
+            );
+            Beta.push(
+              (
+                (1 / XtX) *
+                winRatePast *
+                (totalGoalConcededA - totalGoalConcededB)
+              ).toFixed(2)
+            );
+            let wrPredict =
+              parseFloat(Beta[0]) +
+              parseFloat(
+                Beta[1] *
+                  (aWinArr[aWinArr.length - 1] - bWinArr[bWinArr.length - 1])
+              ) +
+              parseFloat(
+                Beta[2] *
+                  (aLossArr[aLossArr.length - 1] -
+                    bLossArr[bLossArr.length - 1])
+              ) +
+              parseFloat(Beta[3] * (totalGoalScoreA - totalGoalScoreB)) +
+              parseFloat(Beta[4] * (totalGoalConcededA - totalGoalConcededB));
+            return wrPredict.toFixed(2);
+          }
+          let teamOneWinRate = calWinRate(
+            aWinArr,
+            bWinArr,
+            totalGoalScoreA,
+            totalGoalScoreB,
+            totalGoalConcededA,
+            totalGoalConcededB,
+            arrWinRateA,
+            arrWinRateB,
+            aWinArr,
+            bWinArr,
+            aLossArr,
+            bLossArr
+          );
+          let teamTwoWinRate = calWinRate(
+            bWinArr,
+            aWinArr,
+            totalGoalScoreB,
+            totalGoalScoreA,
+            totalGoalConcededB,
+            totalGoalConcededA,
+            arrWinRateB,
+            arrWinRateA,
+            bWinArr,
+            aWinArr,
+            bLossArr,
+            aLossArr
+          );
+          var drawRate = (100 - teamOneWinRate - teamTwoWinRate).toFixed(2);
+          let winRateArr = [
+            teamOne,
+            teamOneWinRate,
+            teamTwo,
+            teamTwoWinRate,
+            'Draw',
+            drawRate,
+          ];
+          // winRateArr.push(teamOneWinRate);
+          // winRateArr.push(teamTwoWinRate);
+          // winRateArr.push(drawRate);
+
+          console.log(teamOneWinRate + ' teamOneWinRate');
+          console.log(teamTwoWinRate + ' teamTwoWinRate');
+          console.log(drawRate + ' drawRate');
+          // console.log(100 - teamOneWinRate - teamTwoWinRate);
+          res.render('winRate', { winRateArr }); // template EJS
+          connection.release(); // Release the connection when done with it
+          if (err) {
+            reject(err);
+            return;
+          }
+        }
+      );
+    });
+  } else {
+    let winRateArr = [
+      '1st Team',
+      'win Rate',
+      '2nd Team',
+      'win Rate',
+      'Draw Rate',
+    ];
+    res.render('winRate', { winRateArr });
+  }
 });
