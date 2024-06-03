@@ -15,14 +15,8 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
-    <!-- Step 1) Load D3.js -->
-    <script src="https://d3js.org/d3.v6.min.js"></script>
-
-    <!-- Step 2) Load billboard.js with style -->
-    <script src="../../../billboard.js/dist/billboard.js"></script>
-
-    <!-- Load with dark theme style -->
-    <link rel="stylesheet" href="../../../billboard.js/dist/theme/dark.css" />
+    <!-- Chart.js js-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
 
   <body>
@@ -163,18 +157,90 @@
         </div>
       </div>
       <div class="container bg-white" id="winRateBox">
-        <div id="">
-          <div><%= winRateObj.teamOneProp %></div>
-          <div><%= winRateObj.teamOneWinRateProp %></div>
+        <div class="container" id="graph_container">
+          <canvas id="acquisitions"></canvas>
         </div>
-        <div id="">
-          <div><%= winRateObj.drawProp %></div>
-          <div><%= winRateObj.drawRateProp %></div>
-        </div>
-        <div id="">
-          <div><%= winRateObj.teamTwoProp %></div>
-          <div><%= winRateObj.teamTwoWinRateProp %></div>
-        </div>
+        <script>
+          let teamOneName = JSON.parse(
+            '<%- JSON.stringify(winRateObj.teamOneProp) %>'
+          );
+          let teamTwoName = JSON.parse(
+            '<%- JSON.stringify(winRateObj.teamTwoProp) %>'
+          );
+          let teamOneWinRate = JSON.parse(
+            '<%- JSON.stringify(winRateObj.teamOneWinRateProp) %>'
+          );
+          let teamTwoWinRate = JSON.parse(
+            '<%- JSON.stringify(winRateObj.teamTwoWinRateProp) %>'
+          );
+          let drawRate = JSON.parse(
+            '<%- JSON.stringify(winRateObj.drawRateProp)%>'
+          );
+          (Chart.defaults.font.family =
+            "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif"),
+            (Chart.defaults.font.size = 15),
+            new Chart(document.getElementById('acquisitions'), {
+              type: 'bar',
+              options: {
+                indexAxis: 'y',
+
+                scales: {
+                  x: {
+                    stacked: true,
+                  },
+                  y: {
+                    stacked: true,
+                  },
+                },
+                plugins: {
+                  legend: {
+                    display: true,
+                    labels: {
+                      // This more specific font property overrides the global property
+                      font: {
+                        family:
+                          "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif",
+                      },
+                    },
+                  },
+                  title: {
+                    display: true,
+                    text: 'Win Rate Stacked Bar',
+                    font: {
+                      family:
+                        "'Century Gothic', 'CenturyGothic', 'AppleGothic', sans-serif",
+                    },
+                  },
+                },
+              },
+              responsive: true,
+
+              data: {
+                labels: ['Rate'],
+
+                datasets: [
+                  {
+                    data: [teamOneWinRate],
+                    label: teamOneName,
+                    backgroundColor: 'rgba(63,103,126,1)',
+                    hoverBackgroundColor: 'rgba(50,90,100,1)',
+                  },
+                  {
+                    data: [drawRate],
+                    label: 'Draw Rate',
+                    backgroundColor: 'rgba(163,103,126,1)',
+                    hoverBackgroundColor: 'rgba(140,85,100,1)',
+                  },
+                  {
+                    data: [teamTwoWinRate],
+                    label: teamTwoName,
+                    backgroundColor: 'rgba(63,203,226,1)',
+                    hoverBackgroundColor: 'rgba(46,185,235,1)',
+                  },
+                ],
+              },
+            });
+        </script>
       </div>
     </main>
     <footer>

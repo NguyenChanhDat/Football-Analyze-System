@@ -121,7 +121,12 @@ app.get('/NavBar%20Files/Teams%20Files/winRate.html', (req, res) => {
   console.log(req.query.secondTeam);
   var teamOne = req.query.firstTeam;
   var teamTwo = req.query.secondTeam;
-  if (teamOne != undefined || teamTwo != undefined) {
+  if (
+    teamOne != undefined &&
+    teamTwo != undefined &&
+    teamOne != 'Pick a Team...' &&
+    teamTwo != 'Pick a Team...'
+  ) {
     con.getConnection(function (err, connection) {
       if (err) {
         reject(err);
@@ -319,7 +324,6 @@ app.get('/NavBar%20Files/Teams%20Files/winRate.html', (req, res) => {
             drawProp: 'Draw',
             drawRateProp: drawRate,
           };
-          
 
           console.log(teamOneWinRate + ' teamOneWinRate');
           console.log(teamTwoWinRate + ' teamTwoWinRate');
@@ -335,13 +339,14 @@ app.get('/NavBar%20Files/Teams%20Files/winRate.html', (req, res) => {
       );
     });
   } else {
-    let winRateArr = [
-      '1st Team',
-      'win Rate',
-      '2nd Team',
-      'win Rate',
-      'Draw Rate',
-    ];
-    res.render('winRate', { winRateArr });
+    let winRateObj = {
+      teamOneProp: '1st Team',
+      teamOneWinRateProp: 'Win Rate',
+      teamTwoProp: '2nd Team',
+      teamTwoWinRateProp: 'Win Rate',
+      drawProp: 'Draw',
+      drawRateProp: 'Draw Rate',
+    };
+    res.render('winRate', { winRateObj });
   }
 });
