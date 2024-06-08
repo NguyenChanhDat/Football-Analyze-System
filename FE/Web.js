@@ -109,7 +109,6 @@ app.get('/NavBar%20Files/Teams%20Files/chart.html', (req, res) => {
           teamAvgPossession,
           teamGoalTotal
         );
-        // console.log(result);
         res.render('chart', { result });
       }
     );
@@ -137,7 +136,6 @@ app.get('/NavBar%20Files/Teams%20Files/winRate.html', (req, res) => {
         'select *from h2h where ((homeTeam in(?,?)) and (awayTeam in(?,?)))',
         [teamOne, teamTwo, teamOne, teamTwo],
         function (err, queryResult, fields) {
-          // console.log(queryResult);
           let aWin = 0;
           let bWin = 0;
           let aLoss = 0;
@@ -193,8 +191,6 @@ app.get('/NavBar%20Files/Teams%20Files/winRate.html', (req, res) => {
             }
           }
 
-          console.log(arrWinRateA);
-          console.log(arrWinRateB);
           let totalGoalScoreA = 0;
           let totalGoalScoreB = 0;
           let totalGoalConcededA = 0;
@@ -315,7 +311,20 @@ app.get('/NavBar%20Files/Teams%20Files/winRate.html', (req, res) => {
             bLossArr,
             aLossArr
           );
+          if (teamOneWinRate == 0) {
+            teamOneWinRate = 0.01;
+          }
+          if (teamTwoWinRate == 0) {
+            teamTwoWinRate = 0.01;
+          }
+          if (teamOneWinRate > 99) {
+            teamOneWinRate = 99.98;
+          } else if (teamTwoWinRate > 99) {
+            teamTwoWinRate = 99.98;
+          }
           var drawRate = (100 - teamOneWinRate - teamTwoWinRate).toFixed(2);
+          //Sigmoid Function for >100 win Rate:
+
           let winRateObj = {
             teamOneProp: teamOne,
             teamOneWinRateProp: teamOneWinRate,
@@ -325,10 +334,7 @@ app.get('/NavBar%20Files/Teams%20Files/winRate.html', (req, res) => {
             drawRateProp: drawRate,
           };
 
-          console.log(teamOneWinRate + ' teamOneWinRate');
-          console.log(teamTwoWinRate + ' teamTwoWinRate');
-          console.log(drawRate + ' drawRate');
-          // console.log(100 - teamOneWinRate - teamTwoWinRate);
+    
           res.render('winRate', { winRateObj }); // template EJS
           connection.release(); // Release the connection when done with it
           if (err) {
